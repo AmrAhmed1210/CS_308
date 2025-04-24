@@ -1,24 +1,71 @@
-
+import criteria.FilterQuery;
+import criteria.Operator;
+import dao.DBConfig;
 import dao.DBStudent;
-import java.util.List;
 import dao.DBepartment_test;
 import models.Student;
-import java.util.Date;
 import models.department_test;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.hibernate.Session;
+
 public class StudentApp {
+
+    public static void testCache() {
+        try (Session session = DBConfig.SESSION_FACTORY.openSession()) {
+            System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+            System.out.println(session.get(Student.class, 1));
+            System.out.println("----------------------------------------------------------------------------------------");
+            System.out.println(session.get(Student.class, 2));
+            System.out.println("----------------------------------------------------------------------------------------");
+            System.out.println(session.get(Student.class, 1));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void testCache1() {
+        try (Session session = DBConfig.SESSION_FACTORY.openSession()) {
+            System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+            System.out.println(session.get(Student.class, 1));
+            System.out.println("----------------------------------------------------------------------------------------");
+            System.out.println(session.get(Student.class, 2));
+            System.out.println("----------------------------------------------------------------------------------------");
+            System.out.println(session.get(Student.class, 1));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
+
         DBStudent dbStudent = new DBStudent();
 
-        //------------------print all data---------------------//
-        List<Student> studentList = dbStudent.get();
-        for (Student e : studentList) {
-            System.out.println(e.toString());
-            System.out.println(e.getDepartmenTtest());
+        //------------------invoke---------------------//
+//        testCache();
+//        testCache1();
+
+        //------------------use the function get filter--------------------//
+        List<FilterQuery> filterQueries = new ArrayList<>();
+        filterQueries.add(new FilterQuery("name", "Omer Ahmed", Operator.EQ));
+        for (Student student : dbStudent.getFilter(filterQueries)) {
+            System.out.println(student);
         }
-//        //------------------print by id -----------------------//
+
+        //------------------print all data---------------------//
+//        List<Student> studentList = dbStudent.get();
+//        for (Student e : studentList) {
+//            System.out.println(e.getName().toString());
+//            System.out.println(e.getDepartmenTtest());
+//        }
+
+        //------------------print by id -----------------------//
 //        System.out.println(dbStudent.get(1));
-////        //------------------insert----------------------------//
+
+        //------------------insert----------------------------//
 //        Student student1 = new Student();
 //        student1.setName("Omer Ahmed");
 //        student1.setAge(20);
@@ -31,7 +78,7 @@ public class StudentApp {
 //            System.err.println(e.getMessage());
 //        }
 
-////        //------------------update----------------------------//
+        //------------------update----------------------------//
 //        Student student2 = dbStudent.get(3);
 //        if (student2 != null) {
 //            student2.setName("Mustafa");
@@ -42,7 +89,8 @@ public class StudentApp {
 //                System.err.println(e.getMessage());
 //            }
 //        }
-//        //------------------delete----------------------------//
+
+        //------------------delete----------------------------//
 //        dbStudent.delete(2);
 //        System.out.println("Student deleted.");
     }
