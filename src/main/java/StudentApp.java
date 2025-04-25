@@ -4,6 +4,7 @@ import dao.DBConfig;
 import dao.DBStudent;
 import dao.DBepartment_test;
 import models.Student;
+import models.courses;
 import models.department_test;
 
 import java.util.ArrayList;
@@ -49,18 +50,28 @@ public class StudentApp {
 //        testCache1();
 
         //------------------use the function get filter--------------------//
-        List<FilterQuery> filterQueries = new ArrayList<>();
-        filterQueries.add(new FilterQuery("name", "Omer Ahmed", Operator.EQ));
-        for (Student student : dbStudent.getFilter(filterQueries)) {
-            System.out.println(student);
-        }
+//        List<FilterQuery> filterQueries = new ArrayList<>();
+//        filterQueries.add(new FilterQuery("name", "Omer Ahmed", Operator.EQ));
+//        for (Student student : dbStudent.getFilter(filterQueries)) {
+//            System.out.println(student);
+//        }
 
         //------------------print all data---------------------//
 //        List<Student> studentList = dbStudent.get();
 //        for (Student e : studentList) {
 //            System.out.println(e.getName().toString());
-//            System.out.println(e.getDepartmenTtest());
+//            System.out.println(e.getDepartment());
 //        }
+
+        List<Student> students = dbStudent.get();
+        for (Student student : students) {
+            System.out.println("Student: " + student.getName());
+            System.out.println("Courses: ");
+            for (courses course : student.getCourses()) {
+                System.out.println(" - " + course.getName());
+            }
+            System.out.println("----------------------");
+        }
 
         //------------------print by id -----------------------//
 //        System.out.println(dbStudent.get(1));

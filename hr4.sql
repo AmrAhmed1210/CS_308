@@ -13,9 +13,38 @@ CREATE TABLE student (
     CONSTRAINT fk_department FOREIGN KEY (d_id) REFERENCES department_test(d_id)
 );
 
+CREATE TABLE courses (
+    c_id NUMBER  PRIMARY KEY,
+    c_name VARCHAR2(100)
+);
+
+CREATE TABLE system.student_courses (
+    s_id NUMBER,
+    c_id NUMBER,
+    PRIMARY KEY (s_id, c_id),
+    FOREIGN KEY (s_id) REFERENCES system.student(s_id),
+    FOREIGN KEY (c_id) REFERENCES system.courses(c_id)
+);
+
+
 INSERT INTO department_test (d_id, d_name) VALUES (1, 'Computer Science');
 INSERT INTO department_test (d_id, d_name) VALUES (2, 'Information Systems');
 INSERT INTO department_test (d_id, d_name) VALUES (3, 'Software Engineering');
+
+INSERT INTO courses (c_id, c_name) VALUES (1, 'Java Programming');
+INSERT INTO courses (c_id, c_name) VALUES (2, 'Database Systems');
+INSERT INTO courses (c_id, c_name) VALUES (3, 'Web Development');
+
+
+INSERT INTO system.student_courses (s_id, c_id) 
+VALUES (1, 2); 
+
+INSERT INTO system.student_courses (s_id, c_id) 
+VALUES (2, 1);  
+
+INSERT INTO system.student_courses (s_id, c_id) 
+VALUES (1, 3);  
+
 COMMIT;
 
 INSERT INTO student (s_id, s_name, address, age, joined_date, d_id)
@@ -33,5 +62,7 @@ COMMIT;
 
 SELECT * FROM student;
 SELECT * FROM department_test;
+SELECT * FROM courses;
+SELECT * FROM student_courses;
 
 COMMIT;
